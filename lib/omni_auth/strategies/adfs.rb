@@ -8,13 +8,27 @@ module OmniAuth
       option :authorize_params,
              {
                response_type: 'code',
-               resource: 'https://oauth.cropio.com'
+               resource: 'http://oauth.cropio.com:3000'
              }
       option :client_options,
              {
                site: 'https://adfs.agroinvest.com',
-               authorize_url: 'adfs/oauth2/authorize'
+               authorize_url: 'adfs/oauth2/authorize',
+               token_url: 'adfs/oauth2/token'
              }
+
+      option :token_options, [:redirect_uri]
+
+      option :redirect_uri, 'http://oauth.cropio.com:3000/users/auth/adfs/callback'
+
+      def callback_phase
+        byebug
+        super
+      end
+
+      uid do
+         JWT.decode(access_token.token, nil, false)[0]['email']
+      end
     end
   end
 end

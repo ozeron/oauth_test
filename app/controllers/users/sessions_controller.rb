@@ -16,6 +16,13 @@ class Users::SessionsController < Devise::SessionsController
   #   super
   # end
 
+  def setup
+    puts "Hello World!"
+    byebug
+    request.env['omniauth.strategy'].options.client_options.site = 'http://adfs.localhost:3213'
+    render :text => "Omniauth setup phase.", :status => 404
+  end
+
   # protected
 
   # If you have extra params to permit, append them to the sanitizer.
