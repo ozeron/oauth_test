@@ -3,7 +3,7 @@ module OmniAuth
     class Adfs < OmniAuth::Strategies::OAuth2
       option :name, 'adfs'
 
-      option :client_id, 'ab172737-444a-4abc-a556-687b73838a88'
+      option :client_id, 'ab762716-544d-4aeb-a526-687b73838a33'
       option :provider_ignores_state, true
       option :authorize_params,
              {
@@ -17,12 +17,13 @@ module OmniAuth
                token_url: 'adfs/oauth2/token'
              }
 
+
       option :token_options, [:redirect_uri]
 
-      option :redirect_uri, 'http://oauth.cropio.com:3000/users/auth/adfs/callback'
-
-      def callback_phase
-        byebug
+      option :redirect_uri, 'http://oauth.cropio.com:3000/d/users/auth/adfs/callback'
+      
+      def build_access_token 
+#        byebug
         super
       end
 
