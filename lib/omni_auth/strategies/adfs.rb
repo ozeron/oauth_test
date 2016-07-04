@@ -21,8 +21,8 @@ module OmniAuth
       option :token_options, [:redirect_uri]
 
       option :redirect_uri, 'http://oauth.cropio.com:3000/d/users/auth/adfs/callback'
-      
-      def build_access_token 
+
+      def build_access_token
 #        byebug
         super
       end

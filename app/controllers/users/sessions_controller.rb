@@ -17,9 +17,9 @@ class Users::SessionsController < Devise::SessionsController
   # end
 
   def setup
-    puts "Hello World!"
-    byebug
-    request.env['omniauth.strategy'].options.client_options.site = 'http://adfs.localhost:3213'
+    strategy = request.env['omniauth.strategy']
+    return unless strategy
+
     render :text => "Omniauth setup phase.", :status => 404
   end
 
