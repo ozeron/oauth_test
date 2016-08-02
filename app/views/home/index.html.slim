@@ -7,3 +7,8 @@ p DolorIpsum
 - else
     p Hello, guest!
     = link_to "ADFS Log In", user_omniauth_authorize_path(:adfs)
+javascript:
+  var userAgent = window.navigator.userAgent;
+  if (userAgent.match(/iPad/i) || userAgent.match(/iPhone/i)) {
+    window.location = 'CropioApp://?data={"success": "true","user_api_token": 123124, "user_id": 23,"email": "email@user.com", "username": "name","company": "tenatn","time_zone":"+2:00","language":"RU"}'
+  }
