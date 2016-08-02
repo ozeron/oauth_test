@@ -237,6 +237,7 @@ Devise.setup do |config|
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
   config.omniauth :adfs, strategy_class: OmniAuth::Strategies::Adfs, setup: true
+  config.omniauth :adfs_mobile, strategy_class: OmniAuth::Strategies::Adfs, setup: true
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

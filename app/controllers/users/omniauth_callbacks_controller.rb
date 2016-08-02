@@ -7,7 +7,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   # def twitter
   # end
     def adfs
-      @user = User.find_by_email(request.env["omniauth.auth"]['uid'].downcase)
+      @user = User.find_by_email()
       if @user.present? && @user.persisted?
         sign_in_and_redirect @user, event: :authentication
         set_flash_message(:notice, :success, kind: 'Agroinvest Adfs') if is_navigational_format?
@@ -16,27 +16,44 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       end
     end
 
+    def adfs_mobile
+      @user = User.find_by(email: uid)
+      return failure_address_mismatch if uid != params['email'].downcase
+      if @user&.persisted?
+        response.headers['X-User-Api-Token'] = create_user_auth_token(@user)
+        render plain: "OK"
+      else
+        failure
+      end
+    end
+
     def failure
+      # set_flash_message(:error, :f, kind: 'Agroinvest Adfs') if is_navigational_format?
+      flash.now[:error] = "Tryed to log in with email#{uid}. #{uid} not registered in the system."
       redirect_to root_path
     end
 
-  # More info at:
-  # https://github.com/plataformatec/devise#omniauth
+    protected
 
-  # GET|POST /resource/auth/twitter
-  # def passthru
-  #   super
-  # end
+    def uid
+      request.env["omniauth.auth"]['uid'].downcase
+    end
 
-  # GET|POST /users/auth/twitter/callback
-  # def failure
-  #   super
-  # end
+    def create_user_auth_token(user)
+    user.create_user_auth_token!(device_info_from_user_agent)
+  end
 
-  # protected
+  def device_info_from_user_agent
+    user_agent = request.env['HTTP_USER_AGENT']
+    client = DeviceDetector.new(user_agent)
 
-  # The path used when OmniAuth fails
-  # def after_omniauth_failure_path_for(scope)
-  #   super(scope)
-  # end
+    {
+      name: client.name,
+      full_version: client.full_version,
+      os_name: client.os_name,
+      os_full_version: client.os_full_version,
+      device_name: client.device_name,
+      device_type: client.device_type
+    }
+  end
 end
