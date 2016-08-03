@@ -22,13 +22,24 @@ module OmniAuth
 
       option :redirect_uri, 'http://oauth.cropio.com:3000/d/users/auth/adfs/callback'
 
-      def build_access_token
-#        byebug
-        super
+      def callback_url
+        URI(super).tap { |u| sanitize_query!(u) }.to_s
       end
 
       uid do
-         JWT.decode(access_token.token, nil, false)[0]['email']
+        JWT.decode(access_token.token)[0]['email']
+      end
+
+      private
+
+      def sanitize_query!(uri)
+        uri.query = sanitize_query(uri)
+      end
+
+      def sanitize_query(uri)
+        Rack::Utils.parse_query(uri.query).select do |k, _|
+          %w(tenant email mobile).include?(k)
+        end.to_query
       end
     end
   end

@@ -19,8 +19,11 @@ class Users::SessionsController < Devise::SessionsController
   def setup
     strategy = request.env['omniauth.strategy']
     return unless strategy
-
-    render :text => "Omniauth setup phase.", :status => 404
+    if params['email'].present?
+      strategy.options.authorize_params.username = params['email']
+    end
+    strategy.options.authorize_params.resource = request.base_url
+    render text: 'Omniauth setup phase.', status: 404
   end
 
   # protected

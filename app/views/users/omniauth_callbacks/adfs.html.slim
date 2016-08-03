@@ -1,0 +1,5 @@
+div#redirect-url data-url="#{@url}"
+javascript:
+  $(function(){
+    window.location = $('#redirect-url').data('url');
+  });
