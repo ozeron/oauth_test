@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     get 'd/users/auth/:provider/setup' => 'users/sessions#setup'
   end
   root to: "home#index"
+  resources :tests
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
